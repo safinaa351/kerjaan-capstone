@@ -8,9 +8,12 @@ from exceptions import InputError
 app = Flask(__name__)
 
 # Load model (local or cloud)
-MODEL_URL_OR_PATH = os.getenv("https://storage.googleapis.com/capstone-c242-ps370.appspot.com/ml-models/face-recognition/siamesemodel.h5", "../model/siamesemodel.h5")  # Default to local if not set
-model = load_model(MODEL_URL_OR_PATH)
-app.config["model"] = model
+MODEL_URL_OR_PATH = os.getenv(
+    "MODEL_URL_OR_PATH",
+    "https://storage.googleapis.com/capstone-c242-ps370.appspot.com/ml-models/face-recognition/siamesemodel.h5",
+)
+if not MODEL_URL_OR_PATH.startswith("https://") and not os.path.exists(MODEL_URL_OR_PATH):
+    MODEL_URL_OR_PATH = "../model/siamesemodel.h5"
 
 # Move this import inside the main execution block
 def initialize_routes():
